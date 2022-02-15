@@ -40,4 +40,5 @@ dependencies {
 //    implementation project(":core")
     implementation project(":core")
     annotationProcessor project(":compiler")
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.3'
 }

@@ -1,4 +1,7 @@
-package top.niunaijun.blackreflection;
+package top.niunaijun.blackreflection.ref;
+
+import android.content.Intent;
+import android.os.IBinder;
 
 import top.niunaijun.blackreflection.annotation.BMethod;
 import top.niunaijun.blackreflection.annotation.BStaticField;
@@ -24,6 +27,11 @@ public interface ActivityThread {
 
     @BMethod
     String getProcessName();
+
+    @BMethod
+    void sendActivityResult(
+            IBinder token, String id, int requestCode,
+            int resultCode, Intent data);
 
     @BStrClass("android.app.ActivityThread$H")
     interface H {
