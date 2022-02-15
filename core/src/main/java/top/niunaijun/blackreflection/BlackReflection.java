@@ -35,32 +35,37 @@ public class BlackReflection {
             Object o = Proxy.newProxyInstance(clazz.getClassLoader(), new Class[]{clazz}, new InvocationHandler() {
                 @Override
                 public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-                    String name = method.getName();
+                    try {
+                        String name = method.getName();
 
-                    // fidel
-                    BField bField = method.getAnnotation(BField.class);
-                    BFieldNotProcess bFieldNotProcess = method.getAnnotation(BFieldNotProcess.class);
-                    if (bField != null || bFieldNotProcess != null) {
+                        // fidel
+                        BField bField = method.getAnnotation(BField.class);
+                        BFieldNotProcess bFieldNotProcess = method.getAnnotation(BFieldNotProcess.class);
+                        if (bField != null || bFieldNotProcess != null) {
+                            Object call;
+                            Reflector on = Reflector.on(aClass).field(name);
+                            if (caller == null) {
+                                call = on.get(args);
+                            } else {
+                                call = on.get(caller);
+                            }
+                            return call;
+                        }
+
+                        // method
+                        Class<?>[] paramClass = getParamClass(method);
                         Object call;
-                        Reflector on = Reflector.on(aClass).field(name);
+                        Reflector on = Reflector.on(aClass).method(name, paramClass);
                         if (caller == null) {
-                            call = on.get(args);
+                            call = on.call(args);
                         } else {
-                            call = on.get(caller);
+                            call = on.callByCaller(caller, args);
                         }
                         return call;
+                    } catch (Throwable throwable) {
+                        throwable.printStackTrace();
                     }
-
-                    // method
-                    Class<?>[] paramClass = getParamClass(method);
-                    Object call;
-                    Reflector on = Reflector.on(aClass).method(name, paramClass);
-                    if (caller == null) {
-                        call = on.call(args);
-                    } else {
-                        call = on.callByCaller(caller, args);
-                    }
-                    return call;
+                    return null;
                 }
             });
             return (T) o;
