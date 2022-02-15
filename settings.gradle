@@ -1,0 +1,4 @@
+rootProject.name = "BlackReflection"
+include ':app'
+include ':core'
+include ':compiler'

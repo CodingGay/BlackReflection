@@ -1,0 +1,28 @@
+plugins {
+    id 'java-library'
+    id 'com.github.dcendents.android-maven'
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    annotationProcessor 'com.google.auto.service:auto-service:1.0-rc2'
+    compileOnly 'com.google.auto.service:auto-service:1.0-rc2'
+    implementation 'com.squareup:javapoet:1.8.0'
+    implementation project(":core")
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+
+repositories {
+    mavenCentral()
+    maven {
+        url uri('localRepo')
+    }
+}
+
+group='top.niunaijun.blackreflection'
+version='1.0.0'
