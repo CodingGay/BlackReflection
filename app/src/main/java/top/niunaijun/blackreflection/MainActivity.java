@@ -4,6 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+
+import top.niunaijun.blackreflection.ref.BRActivityThread;
 
 public class MainActivity extends AppCompatActivity {
     public static final String TAG = "MainActivity";
@@ -20,5 +23,9 @@ public class MainActivity extends AppCompatActivity {
             intent.setClass(MainActivity.this, SecondActivity.class);
             startActivity(intent);
         });
+
+        Object currentActivityThread = BRActivityThread.get().currentActivityThread();
+        String processName = BRActivityThread.get(currentActivityThread).getProcessName();
+        Log.d(TAG, "processName: " + processName);
     }
 }
