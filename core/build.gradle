@@ -1,5 +1,6 @@
 plugins {
     id 'java-library'
+    id 'com.github.dcendents.android-maven'
 }
 
 tasks.withType(JavaCompile) {
@@ -10,3 +11,6 @@ java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
 }
+
+group = rootProject.ext.group
+version = rootProject.ext.version

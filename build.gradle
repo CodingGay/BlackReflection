@@ -24,3 +24,8 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+ext {
+    group = 'top.niunaijun.blackreflection'
+    version = '1.0.0'
+}

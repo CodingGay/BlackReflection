@@ -24,5 +24,5 @@ repositories {
     }
 }
 
-group='top.niunaijun.blackreflection'
-version='1.0.0'
+group = rootProject.ext.group
+version = rootProject.ext.version
