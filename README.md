@@ -78,9 +78,6 @@ BRActivityThread是程序自动生成的类，生成规则是BR + ClassName
 ### 混淆配置
 ```
 -keep class top.niunaijun.blackreflection.** {*; }
--keep @top.niunaijun.blackreflection.annotation.BClass class * {*;}
--keep @top.niunaijun.blackreflection.annotation.BClassName class * {*;}
--keep @top.niunaijun.blackreflection.annotation.BClassNameNotProcess class * {*;}
 -keepclasseswithmembernames class * {
     @top.niunaijun.blackreflection.annotation.BField.* <methods>;
     @top.niunaijun.blackreflection.annotation.BFieldNotProcess.* <methods>;
