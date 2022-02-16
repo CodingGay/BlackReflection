@@ -48,9 +48,11 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "before set TAGContext: " + TAGContext);
         BRMainActivity.get(this).setTAGContext(TAGContext + " changed");
         Log.d(TAG, "after set TAGContext: " + TAGContext);
+
+        BRMainActivity.get(this).testInvoke("avalue", 99999);
     }
 
-    public void test() {
-        throw new RuntimeException("test RuntimeException");
+    public void testInvoke(String a, int b) {
+        Log.d(TAG, "testInvoke: a = " + a + ", b = " + b);
     }
 }

@@ -3,6 +3,7 @@ package top.niunaijun.app.ref;
 import top.niunaijun.blackreflection.annotation.BClass;
 import top.niunaijun.blackreflection.annotation.BField;
 import top.niunaijun.blackreflection.annotation.BMethod;
+import top.niunaijun.blackreflection.annotation.BParamClassName;
 import top.niunaijun.blackreflection.annotation.BStaticField;
 
 /**
@@ -22,5 +23,5 @@ public interface MainActivity {
     String TAGContext();
 
     @BMethod
-    void test();
+    void testInvoke(@BParamClassName("java.lang.String") Object a, int b);
 }
