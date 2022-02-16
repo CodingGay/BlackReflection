@@ -121,7 +121,7 @@ public class BlackReflection {
                     } catch (Throwable throwable) {
                         throwable.printStackTrace();
                         if (throwable instanceof BlackNullPointerException) {
-                            throw throwable;
+                            throw new NullPointerException(throwable.getMessage());
                         }
                         if (withException) {
                             throw throwable;
