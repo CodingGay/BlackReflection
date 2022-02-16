@@ -21,9 +21,8 @@ import top.niunaijun.blackreflection.BlackReflectionInterfaceInfo;
 import top.niunaijun.blackreflection.annotation.BFieldNotProcess;
 import top.niunaijun.blackreflection.annotation.BFieldSetNotProcess;
 import top.niunaijun.blackreflection.annotation.BParamClass;
-import top.niunaijun.blackreflection.annotation.BStrClassNotProcess;
-import top.niunaijun.blackreflection.annotation.BStrParamClass;
-import top.niunaijun.blackreflection.utils.ClassUtils;
+import top.niunaijun.blackreflection.annotation.BClassNameNotProcess;
+import top.niunaijun.blackreflection.annotation.BParamClassName;
 
 /**
  * Created by sunwanquan on 2020/1/8.
@@ -54,7 +53,7 @@ public class BlackReflectionInterfaceProxy {
         String finalClass = mClassName
                 .replace(mPackageName + ".", "")
                 .replace(".", "");
-        AnnotationSpec annotationSpec = AnnotationSpec.builder(BStrClassNotProcess.class)
+        AnnotationSpec annotationSpec = AnnotationSpec.builder(BClassNameNotProcess.class)
                 .addMember("value","$S", realMaps.get(mOrigClassName))
                 .build();
 
@@ -69,8 +68,8 @@ public class BlackReflectionInterfaceProxy {
 
             for (VariableElement typeParameter : reflection.getExecutableElement().getParameters()) {
                 ParameterSpec.Builder builder = ParameterSpec.builder(ClassName.get(typeParameter.asType()), typeParameter.getSimpleName().toString());
-                if (typeParameter.getAnnotation(BStrParamClass.class) != null) {
-                    BStrParamClass annotation = typeParameter.getAnnotation(BStrParamClass.class);
+                if (typeParameter.getAnnotation(BParamClassName.class) != null) {
+                    BParamClassName annotation = typeParameter.getAnnotation(BParamClassName.class);
                     builder.addAnnotation(AnnotationSpec.get(annotation));
                 }
                 if (typeParameter.getAnnotation(BParamClass.class) != null) {

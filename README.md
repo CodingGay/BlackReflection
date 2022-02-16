@@ -27,7 +27,7 @@ annotationProcessor 'com.github.CodingGay.BlackReflection:compiler:1.0.0'
 ### Demo
 #### 1. 如果你需要反射 android.app.ActivityThread 中的各种方法，参考：[ActivityThread.java](https://github.com/CodingGay/BlackReflection/blob/main/app/src/main/java/top/niunaijun/blackreflection/ref/ActivityThread.java)
 ```java
-@BStrClass("android.app.ActivityThread")
+@BClassName("android.app.ActivityThread")
 public interface ActivityThread {
 
     @BStaticMethod
@@ -42,7 +42,7 @@ public interface ActivityThread {
     @BMethod
     void sendActivityResult(@BParamClass(IBinder.class) IBinder token, String id, int requestCode, int resultCode, Intent data);
 
-    @BStrClass("android.app.ActivityThread$H")
+    @BClassName("android.app.ActivityThread$H")
     interface H {
         @BStaticField
         int CREATE_SERVICE();
@@ -67,13 +67,13 @@ BRActivityThread是程序自动生成的类，生成规则是BR + ClassName
 注解 | 注解方式 | 解释
 ---|---|---
 @BClass | Class | 指定需要反射的类
-@BStrClass | Class | 指定需要反射的类
+@BClassName | Class | 指定需要反射的类
 @BStaticMethod | Method | 注明是静态方法
 @BMethod | Method | 注明是非静态方法
 @BStaticField | Method | 注明是静态变量
 @BField | Method | 注明是非静态变量
 @BParamClass | Parameter | 注明该参数的Class，用于反射时寻找方法
-@BStrParamClass | Parameter | 注明该参数的Class，用于反射时寻找方法
+@BParamClassName | Parameter | 注明该参数的Class，用于反射时寻找方法
 
 ### License
 

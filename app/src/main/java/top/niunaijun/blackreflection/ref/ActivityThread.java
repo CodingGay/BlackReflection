@@ -6,7 +6,7 @@ import android.os.IBinder;
 import top.niunaijun.blackreflection.annotation.BMethod;
 import top.niunaijun.blackreflection.annotation.BParamClass;
 import top.niunaijun.blackreflection.annotation.BStaticField;
-import top.niunaijun.blackreflection.annotation.BStrClass;
+import top.niunaijun.blackreflection.annotation.BClassName;
 import top.niunaijun.blackreflection.annotation.BStaticMethod;
 
 /**
@@ -17,7 +17,7 @@ import top.niunaijun.blackreflection.annotation.BStaticMethod;
  * しーＪ
  * 此处无Bug
  */
-@BStrClass("android.app.ActivityThread")
+@BClassName("android.app.ActivityThread")
 public interface ActivityThread {
 
     @BStaticMethod
@@ -32,7 +32,7 @@ public interface ActivityThread {
     @BMethod
     void sendActivityResult(@BParamClass(IBinder.class) IBinder token, String id, int requestCode, int resultCode, Intent data);
 
-    @BStrClass("android.app.ActivityThread$H")
+    @BClassName("android.app.ActivityThread$H")
     interface H {
         @BStaticField
         int CREATE_SERVICE();

@@ -14,9 +14,9 @@ import top.niunaijun.blackreflection.annotation.BField;
 import top.niunaijun.blackreflection.annotation.BFieldNotProcess;
 import top.niunaijun.blackreflection.annotation.BFieldSetNotProcess;
 import top.niunaijun.blackreflection.annotation.BParamClass;
-import top.niunaijun.blackreflection.annotation.BStrClass;
-import top.niunaijun.blackreflection.annotation.BStrClassNotProcess;
-import top.niunaijun.blackreflection.annotation.BStrParamClass;
+import top.niunaijun.blackreflection.annotation.BClassName;
+import top.niunaijun.blackreflection.annotation.BClassNameNotProcess;
+import top.niunaijun.blackreflection.annotation.BParamClassName;
 import top.niunaijun.blackreflection.utils.Reflector;
 
 /**
@@ -150,9 +150,9 @@ public class BlackReflection {
             Annotation[] parameterAnnotation = parameterAnnotations[i];
             boolean found = false;
             for (Annotation annotation : parameterAnnotation) {
-                if (annotation instanceof BStrParamClass) {
+                if (annotation instanceof BParamClassName) {
                     found = true;
-                    param[i] = Class.forName(((BStrParamClass) annotation).value());
+                    param[i] = Class.forName(((BParamClassName) annotation).value());
                     break;
                 } else if (annotation instanceof BParamClass) {
                     found = true;
@@ -170,18 +170,18 @@ public class BlackReflection {
 
     private static Class<?> getClassNameByBlackClass(Class<?> clazz) throws ClassNotFoundException {
         BClass bClass = clazz.getAnnotation(BClass.class);
-        BStrClass bStrClass = clazz.getAnnotation(BStrClass.class);
-        BStrClassNotProcess bStrClassNotProcess = clazz.getAnnotation(BStrClassNotProcess.class);
-        if (bClass == null && bStrClass == null && bStrClassNotProcess == null) {
+        BClassName bClassName = clazz.getAnnotation(BClassName.class);
+        BClassNameNotProcess bClassNameNotProcess = clazz.getAnnotation(BClassNameNotProcess.class);
+        if (bClass == null && bClassName == null && bClassNameNotProcess == null) {
             throw new RuntimeException("Not found @BlackClass or @BlackStrClass");
         }
 
         if (bClass != null) {
             return bClass.value();
-        } else if (bStrClass != null) {
-            return Class.forName(bStrClass.value());
+        } else if (bClassName != null) {
+            return Class.forName(bClassName.value());
         } else {
-            return Class.forName(bStrClassNotProcess.value());
+            return Class.forName(bClassNameNotProcess.value());
         }
     }
 }

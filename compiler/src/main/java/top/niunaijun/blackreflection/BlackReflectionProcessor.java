@@ -29,7 +29,7 @@ import top.niunaijun.blackreflection.annotation.BField;
 import top.niunaijun.blackreflection.annotation.BMethod;
 import top.niunaijun.blackreflection.annotation.BStaticField;
 import top.niunaijun.blackreflection.annotation.BStaticMethod;
-import top.niunaijun.blackreflection.annotation.BStrClass;
+import top.niunaijun.blackreflection.annotation.BClassName;
 import top.niunaijun.blackreflection.proxy.BlackReflectionInterfaceProxy;
 import top.niunaijun.blackreflection.proxy.BlackReflectionProxy;
 
@@ -67,7 +67,7 @@ public class BlackReflectionProcessor extends AbstractProcessor {
     public Set<String> getSupportedAnnotationTypes() {
         HashSet<String> supportTypes = new LinkedHashSet<>();
         supportTypes.add(BClass.class.getCanonicalName());
-        supportTypes.add(BStrClass.class.getCanonicalName());
+        supportTypes.add(BClassName.class.getCanonicalName());
 
         supportTypes.add(BField.class.getCanonicalName());
         supportTypes.add(BStaticField.class.getCanonicalName());
@@ -88,8 +88,8 @@ public class BlackReflectionProcessor extends AbstractProcessor {
         mBlackReflectionInterfaceProxies.clear();
         mRealMaps.clear();
 
-        for (Element element : roundEnv.getElementsAnnotatedWith(BStrClass.class)) {
-            BStrClass annotation = element.getAnnotation(BStrClass.class);
+        for (Element element : roundEnv.getElementsAnnotatedWith(BClassName.class)) {
+            BClassName annotation = element.getAnnotation(BClassName.class);
             doProcess(element, annotation.value());
         }
 
