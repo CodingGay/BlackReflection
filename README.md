@@ -20,43 +20,106 @@ allprojects {
 ```
 #### Step 2. 需要使用的模块内引入
 ```gradle
-implementation 'com.github.CodingGay.BlackReflection:core:1.0.4'
-annotationProcessor 'com.github.CodingGay.BlackReflection:compiler:1.0.4'
+implementation 'com.github.CodingGay.BlackReflection:core:1.0.5'
+annotationProcessor 'com.github.CodingGay.BlackReflection:compiler:1.0.5'
 ```
 
 ### Demo
-#### 1. 如果你需要反射 android.app.ActivityThread 中的各种方法，参考：[ActivityThread.java](https://github.com/CodingGay/BlackReflection/blob/main/app/src/main/java/top/niunaijun/app/ref/ActivityThread.java)
+#### 1. 如果你需要反射 top.niunaijun.app.bean.TestReflection 中的各种方法，参考：[MainActivity.java](https://github.com/CodingGay/BlackReflection/blob/main/app/src/main/java/top/niunaijun/app/ref/MainActivity.java)
 ```java
-@BClassName("android.app.ActivityThread")
-public interface ActivityThread {
+public class TestReflection {
+    public static final String TAG = "TestConstructor";
 
-    @BStaticMethod
-    Object currentPackageName();
+    public String mContextValue = "context value";
+    public static String sStaticValue = "static value";
 
-    @BStaticMethod
-    Object currentActivityThread();
+    public TestReflection(String a) {
+        Log.d(TAG, "Constructor called :" + a);
+    }
 
-    @BMethod
-    String getProcessName();
+    public TestReflection(String a, String b) {
+        Log.d(TAG, "Constructor called : a = " + a + ", b = " + b);
+    }
 
-    @BMethod
-    void sendActivityResult(@BParamClass(IBinder.class) IBinder token, String id, int requestCode, int resultCode, Intent data);
+    public String testContextInvoke(String a, int b) {
+        Log.d(TAG, "Context invoke: a = " + a + ", b = " + b);
+        return a + b;
+    }
 
-    @BClassName("android.app.ActivityThread$H")
-    interface H {
-        @BStaticField
-        int CREATE_SERVICE();
+    public static String testStaticInvoke(String a, int b) {
+        Log.d(TAG, "Static invoke: a = " + a + ", b = " + b);
+        return a + b;
+    }
+
+    public static String testParamClassName(String a, int b) {
+        Log.d(TAG, "testParamClassName: a = " + a + ", b = " + b);
+        return a + b;
     }
 }
+
+```
+可以写成如下接口
+```java
+@BClass(top.niunaijun.app.bean.TestReflection.class)
+public interface TestReflection {
+
+    @BConstructor
+    top.niunaijun.app.bean.TestReflection _new(String a, String b);
+
+    @BConstructor
+    top.niunaijun.app.bean.TestReflection _new(String a);
+
+    @BMethod
+    String testContextInvoke(String a, int b);
+
+    @BStaticMethod
+    String testStaticInvoke(String a, int b);
+
+    @BStaticMethod
+    String testParamClassName(@BParamClassName("java.lang.String") Object a, int b);
+
+    @BField
+    String mContextValue();
+
+    @BStaticField
+    String sStaticValue();
+}
+
 ```
 #### 2. build一次，让我生成相关的代码。
 
 #### 3. 可以尽情的反射代码
+构造函数
+```java
+TestReflection testReflection = BRTestReflection.get()._new("a");
+TestReflection testReflection = BRTestReflection.get()._new("a", "b");
 ```
-    Object currentActivityThread = BRActivityThread.get().currentActivityThread();
-    String processName = BRActivityThread.get(currentActivityThread).getProcessName();
 
-    Log.d(TAG, "processName: " + processName);
+反射方法
+```java
+// 静态方法
+BRTestReflection.get(testReflection).testContextInvoke("context", 0);
+
+// 上下文方法
+BRTestReflection.get(testReflection).testContextInvoke("context", 0);
+```
+
+反射变量
+```java
+// 静态变量
+String staticValue = BRTestReflection.get().sStaticValue();
+
+// 上下文变量
+String contextValue = BRTestReflection.get(testReflection).mContextValue();
+```
+
+设置变量
+```java
+// 静态变量
+BRTestReflection.get().setsStaticValue(staticValue + " changed");
+
+// 上下文变量
+BRTestReflection.get(testReflection).setmContextValue(contextValue + " changed");
 ```
 BRActivityThread是程序自动生成的类，生成规则是BR + ClassName
 - BRActivityThread.get() 用于调用静态方法
@@ -68,14 +131,13 @@ BRActivityThread是程序自动生成的类，生成规则是BR + ClassName
 ---|---|---
 @BClass | Class | 指定需要反射的类
 @BClassName | Class | 指定需要反射的类
+@BConstructor | Method | 注明是构造方法
 @BStaticMethod | Method | 注明是静态方法
 @BMethod | Method | 注明是非静态方法
 @BStaticField | Method | 注明是静态变量
 @BField | Method | 注明是非静态变量
 @BParamClass | Parameter | 注明该参数的Class，用于反射时寻找方法
 @BParamClassName | Parameter | 注明该参数的Class，用于反射时寻找方法
-
-详细用法请看Demo [MainActivity.java](https://github.com/CodingGay/BlackReflection/blob/main/app/src/main/java/top/niunaijun/app/MainActivity.java)
 
 ### 混淆配置
 ```

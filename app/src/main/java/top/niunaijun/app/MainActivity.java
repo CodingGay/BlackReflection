@@ -2,57 +2,71 @@ package top.niunaijun.app;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import top.niunaijun.app.ref.BRActivityThread;
-import top.niunaijun.app.ref.BRActivityThreadH;
-import top.niunaijun.app.ref.BRMainActivity;
+import top.niunaijun.app.bean.TestReflection;
+import top.niunaijun.app.ref.BRTestReflection;
 import top.niunaijun.blackreflection.R;
 
 
 public class MainActivity extends AppCompatActivity {
     public static final String TAG = "MainActivity";
 
-    public static String TAGStatic = "tag static";
-    public String TAGContext = "tag context";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        findViewById(R.id.btn_start).setOnClickListener(v -> {
-            Intent intent = new Intent();
-            intent.setClass(MainActivity.this, SecondActivity.class);
-            startActivity(intent);
-        });
 
+        TestReflection testReflection = testBConstructor();
 
-        // call method
-        Object currentActivityThread = BRActivityThread.get().currentActivityThread();
-        String processName = BRActivityThread.get(currentActivityThread).getProcessName();
-        Log.d(TAG, "processName: " + processName);
+        Log.d(TAG, "============================");
 
+        // testInvokeContext
+        BRTestReflection.get(testReflection).testContextInvoke("context", 0);
 
-        // get field
-        int CREATE_SERVICE = BRActivityThreadH.get().CREATE_SERVICE();
-        Log.d(TAG, "get field CREATE_SERVICE: " + CREATE_SERVICE);
+        Log.d(TAG, "============================");
 
+        // testInvokeStatic
+        BRTestReflection.get().testStaticInvoke("static", 0);
 
-        // set field
-        Log.d(TAG, "before set TAGStatic: " + TAGStatic);
-        BRMainActivity.get().setTAGStatic(TAGStatic + " changed");
-        Log.d(TAG, "after set TAGStatic: " + TAGStatic);
+        Log.d(TAG, "============================");
 
-        Log.d(TAG, "before set TAGContext: " + TAGContext);
-        BRMainActivity.get(this).setTAGContext(TAGContext + " changed");
-        Log.d(TAG, "after set TAGContext: " + TAGContext);
+        // testGetContextField
+        String contextValue = BRTestReflection.get(testReflection).mContextValue();
+        Log.d(TAG, "mContextValue: " + contextValue);
 
-        BRMainActivity.get(this).testInvoke("avalue", 99999);
+        Log.d(TAG, "============================");
+
+        // testGetContextField
+        String staticValue = BRTestReflection.get().sStaticValue();
+        Log.d(TAG, "sStaticValue: " + staticValue);
+
+        Log.d(TAG, "============================");
+
+        // setContextField
+        BRTestReflection.get(testReflection).setmContextValue(contextValue + " changed");
+        Log.d(TAG, "mContextValue: " + BRTestReflection.get(testReflection).mContextValue());
+
+        Log.d(TAG, "============================");
+
+        // setStaticField
+        BRTestReflection.get().setsStaticValue(staticValue + " changed");
+        Log.d(TAG, "sStaticValue: " + BRTestReflection.get().sStaticValue());
+
+        Log.d(TAG, "============================");
+
+        // use @BParamClassName
+        BRTestReflection.get().testParamClassName("i am java.lang.String", 0);
     }
 
-    public void testInvoke(String a, int b) {
-        Log.d(TAG, "testInvoke: a = " + a + ", b = " + b);
+    private TestReflection testBConstructor() {
+        // test BConstructor
+        TestReflection testReflection = BRTestReflection.get()._new("a");
+        Log.d(TAG, "TestConstructor: " + testReflection);
+
+        testReflection = BRTestReflection.get()._new("a", "b");
+        Log.d(TAG, "TestConstructor: " + testReflection);
+        return testReflection;
     }
 }

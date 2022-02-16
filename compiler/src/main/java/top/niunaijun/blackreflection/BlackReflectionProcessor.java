@@ -25,6 +25,7 @@ import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 
 import top.niunaijun.blackreflection.annotation.BClass;
+import top.niunaijun.blackreflection.annotation.BConstructor;
 import top.niunaijun.blackreflection.annotation.BField;
 import top.niunaijun.blackreflection.annotation.BMethod;
 import top.niunaijun.blackreflection.annotation.BStaticField;
@@ -74,6 +75,8 @@ public class BlackReflectionProcessor extends AbstractProcessor {
 
         supportTypes.add(BMethod.class.getCanonicalName());
         supportTypes.add(BStaticMethod.class.getCanonicalName());
+
+        supportTypes.add(BConstructor.class.getCanonicalName());
         return supportTypes;
     }
 
@@ -110,6 +113,9 @@ public class BlackReflectionProcessor extends AbstractProcessor {
         }
         for (Element element : roundEnv.getElementsAnnotatedWith(BField.class)) {
             doInterfaceProcess(element, false, true);
+        }
+        for (Element element : roundEnv.getElementsAnnotatedWith(BConstructor.class)) {
+            doInterfaceProcess(element, true, false);
         }
 
         for (BlackReflectionInterfaceProxy value : mBlackReflectionInterfaceProxies.values()) {

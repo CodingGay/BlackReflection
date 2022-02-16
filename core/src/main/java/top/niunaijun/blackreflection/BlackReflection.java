@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 import top.niunaijun.blackreflection.annotation.BClass;
+import top.niunaijun.blackreflection.annotation.BConstructor;
+import top.niunaijun.blackreflection.annotation.BConstructorNotProcess;
 import top.niunaijun.blackreflection.annotation.BField;
 import top.niunaijun.blackreflection.annotation.BFieldNotProcess;
 import top.niunaijun.blackreflection.annotation.BFieldSetNotProcess;
@@ -107,6 +109,13 @@ public class BlackReflection {
 
                         // method
                         Class<?>[] paramClass = getParamClass(method);
+                        BConstructor bConstructor = method.getAnnotation(BConstructor.class);
+                        BConstructorNotProcess bConstructorNotProcess = method.getAnnotation(BConstructorNotProcess.class);
+                        if (bConstructor != null || bConstructorNotProcess != null) {
+                            Reflector on = Reflector.on(aClass).constructor(paramClass);
+                            return on.newInstance(args);
+                        }
+
                         Object call;
                         Reflector on = Reflector.on(aClass).method(name, paramClass);
                         if (isStatic) {

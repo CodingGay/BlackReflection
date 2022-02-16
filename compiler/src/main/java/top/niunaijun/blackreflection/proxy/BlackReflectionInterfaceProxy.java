@@ -18,6 +18,8 @@ import javax.lang.model.type.MirroredTypeException;
 import javax.lang.model.type.TypeMirror;
 
 import top.niunaijun.blackreflection.BlackReflectionInterfaceInfo;
+import top.niunaijun.blackreflection.annotation.BConstructor;
+import top.niunaijun.blackreflection.annotation.BConstructorNotProcess;
 import top.niunaijun.blackreflection.annotation.BFieldNotProcess;
 import top.niunaijun.blackreflection.annotation.BFieldSetNotProcess;
 import top.niunaijun.blackreflection.annotation.BParamClass;
@@ -90,6 +92,11 @@ public class BlackReflectionInterfaceProxy {
             if (reflection.isField()) {
                 method.addAnnotation(AnnotationSpec.builder(BFieldNotProcess.class).build());
                 interfaceBuilder.addMethod(generateFieldSet(reflection));
+            } else {
+                BConstructor annotation = reflection.getExecutableElement().getAnnotation(BConstructor.class);
+                if (annotation != null) {
+                    method.addAnnotation(AnnotationSpec.builder(BConstructorNotProcess.class).build());
+                }
             }
             interfaceBuilder.addMethod(method.build());
         }
