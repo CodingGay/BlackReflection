@@ -1,6 +1,7 @@
 package top.niunaijun.app;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -24,13 +25,7 @@ public class SecondActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SecondActivity activity = SecondActivity.this;
-        ActionBar supportActionBar = BRAppCompatActivity.get(activity).getSupportActionBar();
-        try {
-            Method getSupportActionBar = AppCompatActivity.class.getDeclaredMethod("getSupportActionBar");
-            getSupportActionBar.setAccessible(true);
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
+        ActionBar supportActionBar = BRAppCompatActivity.get(this).getSupportActionBar();
+        Log.d("SecondActivity", "supportActionBar: " + supportActionBar);
     }
 }
