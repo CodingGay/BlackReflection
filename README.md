@@ -121,9 +121,9 @@ BRTestReflection.get().setsStaticValue(staticValue + " changed");
 // 上下文变量
 BRTestReflection.get(testReflection).setmContextValue(contextValue + " changed");
 ```
-BRActivityThread是程序自动生成的类，生成规则是BR + ClassName
-- BRActivityThread.get() 用于调用静态方法
-- BRActivityThread.get(caller) 用于调用非静态方法
+BRTestReflection是程序自动生成的类，生成规则是BR + ClassName
+- BRTestReflection.get() 用于调用静态方法
+- BRTestReflection.get(caller) 用于调用非静态方法
 
 #### 注解说明
 
