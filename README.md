@@ -20,8 +20,8 @@ allprojects {
 ```
 #### Step 2. 需要使用的模块内引入
 ```gradle
-implementation 'com.github.CodingGay.BlackReflection:core:1.0.3'
-annotationProcessor 'com.github.CodingGay.BlackReflection:compiler:1.0.3'
+implementation 'com.github.CodingGay.BlackReflection:core:1.0.4'
+annotationProcessor 'com.github.CodingGay.BlackReflection:compiler:1.0.4'
 ```
 
 ### Demo
@@ -75,6 +75,21 @@ BRActivityThread是程序自动生成的类，生成规则是BR + ClassName
 @BParamClass | Parameter | 注明该参数的Class，用于反射时寻找方法
 @BParamClassName | Parameter | 注明该参数的Class，用于反射时寻找方法
 
+### 混淆配置
+```
+-keep class top.niunaijun.blackreflection.** {*; }
+-keep @top.niunaijun.blackreflection.annotation.BClass class * {*;}
+-keep @top.niunaijun.blackreflection.annotation.BClassName class * {*;}
+-keep @top.niunaijun.blackreflection.annotation.BClassNameNotProcess class * {*;}
+-keepclasseswithmembernames class * {
+    @top.niunaijun.blackreflection.annotation.BField.* <methods>;
+    @top.niunaijun.blackreflection.annotation.BFieldNotProcess.* <methods>;
+    @top.niunaijun.blackreflection.annotation.BFieldSetNotProcess.* <methods>;
+    @top.niunaijun.blackreflection.annotation.BMethod.* <methods>;
+    @top.niunaijun.blackreflection.annotation.BStaticField.* <methods>;
+    @top.niunaijun.blackreflection.annotation.BStaticMethod.* <methods>;
+}
+```
 ### License
 
 > ```
