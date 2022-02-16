@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.IBinder;
 
 import top.niunaijun.blackreflection.annotation.BMethod;
+import top.niunaijun.blackreflection.annotation.BParamClass;
 import top.niunaijun.blackreflection.annotation.BStaticField;
 import top.niunaijun.blackreflection.annotation.BStrClass;
 import top.niunaijun.blackreflection.annotation.BStaticMethod;
@@ -29,9 +30,7 @@ public interface ActivityThread {
     String getProcessName();
 
     @BMethod
-    void sendActivityResult(
-            IBinder token, String id, int requestCode,
-            int resultCode, Intent data);
+    void sendActivityResult(@BParamClass(IBinder.class) IBinder token, String id, int requestCode, int resultCode, Intent data);
 
     @BStrClass("android.app.ActivityThread$H")
     interface H {
