@@ -20,8 +20,8 @@ allprojects {
 ```
 #### Step 2. 需要使用的模块内引入
 ```gradle
-implementation 'com.github.CodingGay.BlackReflection:core:'
-annotationProcessor 'com.github.CodingGay.BlackReflection:compiler:'
+implementation 'com.github.CodingGay.BlackReflection:core:1.0.0'
+annotationProcessor 'com.github.CodingGay.BlackReflection:compiler:1.0.0'
 ```
 
 ### Demo
