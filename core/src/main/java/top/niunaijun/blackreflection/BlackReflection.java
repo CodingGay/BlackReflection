@@ -34,9 +34,9 @@ public class BlackReflection {
     // key caller
     private static final WeakHashMap<Object, Map<Class<?>, Object>> sCallerProxyCache = new WeakHashMap<>();
 
-    public static <T> T create(Class<T> clazz, final Object caller) {
-        return create(clazz, caller, false);
-    }
+//    public static <T> T create(Class<T> clazz, final Object caller) {
+//        return create(clazz, caller, false);
+//    }
 
     public static <T> T create(Class<T> clazz, final Object caller, boolean withException) {
         try {

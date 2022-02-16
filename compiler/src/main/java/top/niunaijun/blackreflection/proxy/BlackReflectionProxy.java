@@ -58,7 +58,7 @@ public class BlackReflectionProxy {
         MethodSpec.Builder builder = MethodSpec.methodBuilder("get" + (withException ? "WithException" : ""))
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 .returns(mStaticInterface);
-        String statement = "return $T.create($T.class, $L)";
+        String statement = "return $T.create($T.class, null, $L)";
         builder.addStatement(statement,
                 BR,
                 mStaticInterface,
