@@ -1,4 +1,4 @@
-package top.niunaijun.blackreflection;
+package top.niunaijun.app;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,9 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import top.niunaijun.blackreflection.ref.BRActivityThread;
-import top.niunaijun.blackreflection.ref.BRActivityThreadH;
-import top.niunaijun.blackreflection.ref.BRMainActivity;
+import top.niunaijun.app.ref.BRActivityThread;
+import top.niunaijun.app.ref.BRActivityThreadH;
+import top.niunaijun.app.ref.BRMainActivity;
+import top.niunaijun.blackreflection.R;
 
 
 public class MainActivity extends AppCompatActivity {

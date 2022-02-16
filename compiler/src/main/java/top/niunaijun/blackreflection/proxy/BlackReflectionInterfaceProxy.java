@@ -139,6 +139,22 @@ public class BlackReflectionInterfaceProxy {
                 return boolean.class;
             case "char":
                 return char.class;
+            case "int[]":
+                return int[].class;
+            case "byte[]":
+                return byte[].class;
+            case "short[]":
+                return short[].class;
+            case "long[]":
+                return long[].class;
+            case "float[]":
+                return float[].class;
+            case "double[]":
+                return double[].class;
+            case "boolean[]":
+                return boolean[].class;
+            case "char[]":
+                return char[].class;
         }
         return null;
     }

@@ -1,4 +1,4 @@
-package top.niunaijun.blackreflection.ref;
+package top.niunaijun.app.ref;
 
 import top.niunaijun.blackreflection.annotation.BClass;
 import top.niunaijun.blackreflection.annotation.BField;
@@ -13,7 +13,7 @@ import top.niunaijun.blackreflection.annotation.BStaticField;
  * しーＪ
  * 此处无Bug
  */
-@BClass(top.niunaijun.blackreflection.MainActivity.class)
+@BClass(top.niunaijun.app.MainActivity.class)
 public interface MainActivity {
     @BStaticField
     String TAGStatic();

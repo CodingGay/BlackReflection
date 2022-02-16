@@ -63,12 +63,14 @@ public class BlackReflection {
             Object o = Proxy.newProxyInstance(clazz.getClassLoader(), new Class[]{clazz}, new InvocationHandler() {
                 @Override
                 public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                    String name = method.getName();
+                    Class<?> returnType = method.getReturnType();
+
                     try {
                         boolean isStatic = weakCaller == null;
 
                         Object callerByWeak = isStatic ? null : weakCaller.get();
 
-                        String name = method.getName();
                         // fidel
                         BField bField = method.getAnnotation(BField.class);
                         BFieldNotProcess bFieldNotProcess = method.getAnnotation(BFieldNotProcess.class);
@@ -79,12 +81,14 @@ public class BlackReflection {
                                 call = on.get(args);
                             } else {
                                 if (callerByWeak == null) {
-                                    return null;
+                                    return generateNullValue(returnType);
                                 }
                                 call = on.get(callerByWeak);
                             }
                             return call;
                         }
+
+                        // void
                         BFieldSetNotProcess bFieldSetNotProcess = method.getAnnotation(BFieldSetNotProcess.class);
                         if (bFieldSetNotProcess != null) {
                             // startsWith "set"
@@ -109,18 +113,22 @@ public class BlackReflection {
                             call = on.call(args);
                         } else {
                             if (callerByWeak == null) {
-                                return null;
+                                return generateNullValue(returnType);
                             }
                             call = on.callByCaller(callerByWeak, args);
                         }
                         return call;
                     } catch (Throwable throwable) {
                         throwable.printStackTrace();
+                        if (throwable instanceof BlackNullPointerException) {
+                            throw throwable;
+                        }
                         if (withException) {
                             throw throwable;
                         }
                     }
-                    return null;
+
+                    return generateNullValue(returnType);
                 }
             });
 
@@ -183,5 +191,15 @@ public class BlackReflection {
         } else {
             return Class.forName(bClassNameNotProcess.value());
         }
+    }
+
+    private static Object generateNullValue(Class<?> returnType) {
+        if (returnType == void.class) {
+            return 0;
+        }
+        if (returnType.isPrimitive()) {
+            throw new BlackNullPointerException("value is null!");
+        }
+        return null;
     }
 }

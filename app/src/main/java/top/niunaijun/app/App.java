@@ -1,4 +1,4 @@
-package top.niunaijun.blackreflection;
+package top.niunaijun.app;
 
 import android.app.Application;
 

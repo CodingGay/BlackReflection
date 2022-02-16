@@ -1,7 +1,6 @@
-package top.niunaijun.blackreflection;
+package top.niunaijun.app;
 
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -9,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.lang.reflect.Method;
 
-import top.niunaijun.blackreflection.ref.BRAppCompatActivity;
+import top.niunaijun.app.ref.BRAppCompatActivity;
 
 /**
  * Created by Milk on 2022/2/15.
