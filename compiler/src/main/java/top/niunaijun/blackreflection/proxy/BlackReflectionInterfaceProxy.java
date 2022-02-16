@@ -19,9 +19,11 @@ import javax.lang.model.type.TypeMirror;
 
 import top.niunaijun.blackreflection.BlackReflectionInterfaceInfo;
 import top.niunaijun.blackreflection.annotation.BFieldNotProcess;
+import top.niunaijun.blackreflection.annotation.BFieldSetNotProcess;
 import top.niunaijun.blackreflection.annotation.BParamClass;
 import top.niunaijun.blackreflection.annotation.BStrClassNotProcess;
 import top.niunaijun.blackreflection.annotation.BStrParamClass;
+import top.niunaijun.blackreflection.utils.ClassUtils;
 
 /**
  * Created by sunwanquan on 2020/1/8.
@@ -85,15 +87,22 @@ public class BlackReflectionInterfaceProxy {
                 }
                 method.addParameter(builder.build());
             }
-//            String returnClass = reflection.getExecutableElement().getReturnType().toString();
             method.returns(TypeName.get(reflection.getExecutableElement().getReturnType()));
             if (reflection.isField()) {
                 method.addAnnotation(AnnotationSpec.builder(BFieldNotProcess.class).build());
+                interfaceBuilder.addMethod(generateFieldSet(reflection));
             }
             interfaceBuilder.addMethod(method.build());
-
         }
         return JavaFile.builder(mPackageName, interfaceBuilder.build()).build();
+    }
+
+    private MethodSpec generateFieldSet(BlackReflectionInterfaceInfo reflection) {
+        MethodSpec.Builder method = MethodSpec.methodBuilder("set" + reflection.getExecutableElement().getSimpleName().toString())
+                .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
+                .addParameter(ClassName.get("java.lang", "Object"), "value", Modifier.FINAL)
+                .addAnnotation(AnnotationSpec.builder(BFieldSetNotProcess.class).build());
+        return method.build();
     }
 
     public void add(BlackReflectionInterfaceInfo interfaceInfo) {

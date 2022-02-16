@@ -12,6 +12,7 @@ import java.util.WeakHashMap;
 import top.niunaijun.blackreflection.annotation.BClass;
 import top.niunaijun.blackreflection.annotation.BField;
 import top.niunaijun.blackreflection.annotation.BFieldNotProcess;
+import top.niunaijun.blackreflection.annotation.BFieldSetNotProcess;
 import top.niunaijun.blackreflection.annotation.BParamClass;
 import top.niunaijun.blackreflection.annotation.BStrClass;
 import top.niunaijun.blackreflection.annotation.BStrClassNotProcess;
@@ -33,23 +34,25 @@ public class BlackReflection {
     // key caller
     private static final WeakHashMap<Object, Map<Class<?>, Object>> sCallerProxyCache = new WeakHashMap<>();
 
-    public static <T> T create(Class<T> clazz) {
-        return create(clazz, null);
+    public static <T> T create(Class<T> clazz, final Object caller) {
+        return create(clazz, caller, false);
     }
 
-    public static <T> T create(Class<T> clazz, final Object caller) {
+    public static <T> T create(Class<T> clazz, final Object caller, boolean withException) {
         try {
-            if (caller == null) {
-                Object o = sProxyCache.get(clazz);
-                if (o != null) {
-                    return (T) o;
-                }
-            } else {
-                Map<Class<?>, Object> callerClassMap = sCallerProxyCache.get(caller);
-                if (callerClassMap != null) {
-                    Object o = callerClassMap.get(clazz);
+            if (!withException) {
+                if (caller == null) {
+                    Object o = sProxyCache.get(clazz);
                     if (o != null) {
                         return (T) o;
+                    }
+                } else {
+                    Map<Class<?>, Object> callerClassMap = sCallerProxyCache.get(caller);
+                    if (callerClassMap != null) {
+                        Object o = callerClassMap.get(clazz);
+                        if (o != null) {
+                            return (T) o;
+                        }
                     }
                 }
             }
@@ -82,6 +85,21 @@ public class BlackReflection {
                             }
                             return call;
                         }
+                        BFieldSetNotProcess bFieldSetNotProcess = method.getAnnotation(BFieldSetNotProcess.class);
+                        if (bFieldSetNotProcess != null) {
+                            // startsWith "set"
+                            name = name.substring(3);
+                            Reflector on = Reflector.on(aClass).field(name);
+                            if (isStatic) {
+                                on.set(args[0]);
+                            } else {
+                                if (callerByWeak == null) {
+                                    return 0;
+                                }
+                                on.set(callerByWeak, args[0]);
+                            }
+                            return 0;
+                        }
 
                         // method
                         Class<?>[] paramClass = getParamClass(method);
@@ -98,6 +116,9 @@ public class BlackReflection {
                         return call;
                     } catch (Throwable throwable) {
                         throwable.printStackTrace();
+                        if (withException) {
+                            throw throwable;
+                        }
                     }
                     return null;
                 }

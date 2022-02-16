@@ -48,7 +48,6 @@ public interface ActivityThread {
         int CREATE_SERVICE();
     }
 }
-}
 ```
 #### 2. build一次，让我生成相关的代码。
 

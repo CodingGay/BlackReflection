@@ -1,14 +1,11 @@
 package top.niunaijun.blackreflection.proxy;
 
 import com.squareup.javapoet.ClassName;
-import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
 
-import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
-import javax.lang.model.util.Elements;
 
 import top.niunaijun.blackreflection.BlackReflectionInfo;
 import top.niunaijun.blackreflection.utils.ClassUtils;
@@ -42,17 +39,6 @@ public class BlackReflectionProxy {
     }
 
     public JavaFile generateJavaCode() {
-        MethodSpec.Builder getStaticInterface = MethodSpec.methodBuilder("get")
-                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                .returns(mStaticInterface);
-
-        MethodSpec.Builder getContextInterface = MethodSpec.methodBuilder("get")
-                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                .addParameter(ClassName.get("java.lang", "Object"), "caller", Modifier.FINAL)
-                .returns(mContextInterface);
-        generaNotCallerMethod(getStaticInterface);
-        generaCallerMethod(getContextInterface, mReflection);
-
         String finalClass = "BR" + mReflection.getClassName()
                 .replace(mPackageName + ".", "")
                 .replace(".", "");
@@ -60,25 +46,39 @@ public class BlackReflectionProxy {
         // generaClass
         TypeSpec reflection = TypeSpec.classBuilder(finalClass)
                 .addModifiers(Modifier.PUBLIC)
-                .addMethod(getStaticInterface.build())
-                .addMethod(getContextInterface.build())
+                .addMethod(generaNotCallerMethod(true))
+                .addMethod(generaNotCallerMethod(false))
+                .addMethod(generaCallerMethod(true))
+                .addMethod(generaCallerMethod(false))
                 .build();
         return JavaFile.builder(mPackageName, reflection).build();
     }
 
-    private void generaNotCallerMethod(MethodSpec.Builder registerMethod) {
-        String statement = "return $T.create($T.class, null)";
-        registerMethod.addStatement(statement,
+    private MethodSpec generaNotCallerMethod(boolean withException) {
+        MethodSpec.Builder builder = MethodSpec.methodBuilder("get" + (withException ? "WithException" : ""))
+                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                .returns(mStaticInterface);
+        String statement = "return $T.create($T.class, $L)";
+        builder.addStatement(statement,
                 BR,
-                mStaticInterface
+                mStaticInterface,
+                withException
         );
+        return builder.build();
     }
 
-    private void generaCallerMethod(MethodSpec.Builder registerMethod, BlackReflectionInfo reflectionInfo) {
-        String statement = "return $T.create($T.class, caller)";
-        registerMethod.addStatement(statement,
+    private MethodSpec generaCallerMethod(boolean withException) {
+        MethodSpec.Builder builder = MethodSpec.methodBuilder("get" + (withException ? "WithException" : ""))
+                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                .addParameter(ClassName.get("java.lang", "Object"), "caller", Modifier.FINAL)
+                .returns(mContextInterface);
+
+        String statement = "return $T.create($T.class, caller, $L)";
+        builder.addStatement(statement,
                 BR,
-                mContextInterface
+                mContextInterface,
+                withException
         );
+        return builder.build();
     }
 }

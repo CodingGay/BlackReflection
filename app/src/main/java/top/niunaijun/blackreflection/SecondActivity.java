@@ -22,7 +22,7 @@ import top.niunaijun.blackreflection.ref.BRAppCompatActivity;
 public class SecondActivity extends AppCompatActivity {
 
     @Override
-    protected void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         SecondActivity activity = SecondActivity.this;
