@@ -25,7 +25,7 @@ annotationProcessor 'com.github.CodingGay.BlackReflection:compiler:1.0.4'
 ```
 
 ### Demo
-#### 1. 如果你需要反射 android.app.ActivityThread 中的各种方法，参考：[ActivityThread.java](https://github.com/CodingGay/BlackReflection/blob/main/app/src/main/java/top/niunaijun/blackreflection/ref/ActivityThread.java)
+#### 1. 如果你需要反射 android.app.ActivityThread 中的各种方法，参考：[ActivityThread.java](https://github.com/CodingGay/BlackReflection/blob/main/app/src/main/java/top/niunaijun/app/ref/ActivityThread.java)
 ```java
 @BClassName("android.app.ActivityThread")
 public interface ActivityThread {
@@ -74,6 +74,8 @@ BRActivityThread是程序自动生成的类，生成规则是BR + ClassName
 @BField | Method | 注明是非静态变量
 @BParamClass | Parameter | 注明该参数的Class，用于反射时寻找方法
 @BParamClassName | Parameter | 注明该参数的Class，用于反射时寻找方法
+
+详细用法请看Demo [MainActivity.java](https://github.com/CodingGay/BlackReflection/blob/main/app/src/main/java/top/niunaijun/app/MainActivity.java)
 
 ### 混淆配置
 ```
