@@ -173,7 +173,11 @@ public class Reflector {
             throw new Exception("Oops!", e);
         }
     }
-    
+
+    public Method getMethod() {
+        return mMethod;
+    }
+
     protected Method findMethod(String name, Class<?>... parameterTypes) throws NoSuchMethodException {
         try {
             return mType.getMethod(name, parameterTypes);

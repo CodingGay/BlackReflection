@@ -16,6 +16,7 @@ import top.niunaijun.blackreflection.annotation.BField;
 import top.niunaijun.blackreflection.annotation.BFieldCheckNotProcess;
 import top.niunaijun.blackreflection.annotation.BFieldNotProcess;
 import top.niunaijun.blackreflection.annotation.BFieldSetNotProcess;
+import top.niunaijun.blackreflection.annotation.BMethodCheckNotProcess;
 import top.niunaijun.blackreflection.annotation.BParamClass;
 import top.niunaijun.blackreflection.annotation.BClassName;
 import top.niunaijun.blackreflection.annotation.BClassNameNotProcess;
@@ -109,17 +110,27 @@ public class BlackReflection {
                             return 0;
                         }
 
-                        // check
+                        // check field
                         BFieldCheckNotProcess bFieldCheckNotProcess = method.getAnnotation(BFieldCheckNotProcess.class);
                         if (bFieldCheckNotProcess != null) {
                             // startsWith "check"
-                            name = name.substring("check".length());
+                            name = name.substring("_check".length());
                             Reflector on = Reflector.on(aClass).field(name);
                             return on.getField();
                         }
 
-                        // method
                         Class<?>[] paramClass = getParamClass(method);
+
+                        // check method
+                        BMethodCheckNotProcess bMethodCheckNotProcess = method.getAnnotation(BMethodCheckNotProcess.class);
+                        if (bMethodCheckNotProcess != null) {
+                            // startsWith "_check"
+                            name = name.substring("_check".length());
+                            Reflector on = Reflector.on(aClass).method(name, paramClass);
+                            return on.getMethod();
+                        }
+
+                        // method
                         BConstructor bConstructor = method.getAnnotation(BConstructor.class);
                         BConstructorNotProcess bConstructorNotProcess = method.getAnnotation(BConstructorNotProcess.class);
                         if (bConstructor != null || bConstructorNotProcess != null) {

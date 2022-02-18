@@ -9,6 +9,7 @@ import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,7 @@ import top.niunaijun.blackreflection.annotation.BConstructorNotProcess;
 import top.niunaijun.blackreflection.annotation.BFieldCheckNotProcess;
 import top.niunaijun.blackreflection.annotation.BFieldNotProcess;
 import top.niunaijun.blackreflection.annotation.BFieldSetNotProcess;
+import top.niunaijun.blackreflection.annotation.BMethodCheckNotProcess;
 import top.niunaijun.blackreflection.annotation.BParamClass;
 import top.niunaijun.blackreflection.annotation.BClassNameNotProcess;
 import top.niunaijun.blackreflection.annotation.BParamClassName;
@@ -70,6 +72,7 @@ public class BlackReflectionInterfaceProxy {
             MethodSpec.Builder method = MethodSpec.methodBuilder(reflection.getExecutableElement().getSimpleName().toString())
                     .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
 
+            List<ParameterSpec> parameterSpecs = new ArrayList<>();
             for (VariableElement typeParameter : reflection.getExecutableElement().getParameters()) {
                 ParameterSpec.Builder builder = ParameterSpec.builder(ClassName.get(typeParameter.asType()), typeParameter.getSimpleName().toString());
                 if (typeParameter.getAnnotation(BParamClassName.class) != null) {
@@ -88,18 +91,26 @@ public class BlackReflectionInterfaceProxy {
                                 .addMember("value", annotationValue + ".class").build());
                     }
                 }
-                method.addParameter(builder.build());
+
+                ParameterSpec build = builder.build();
+                parameterSpecs.add(build);
+                method.addParameter(build);
             }
             TypeName typeName = TypeName.get(reflection.getExecutableElement().getReturnType());
             method.returns(typeName.box());
             if (reflection.isField()) {
                 method.addAnnotation(AnnotationSpec.builder(BFieldNotProcess.class).build());
+                // set field
                 interfaceBuilder.addMethod(generateFieldSet(reflection));
+                // check field
                 interfaceBuilder.addMethod(generateFieldCheck(reflection));
             } else {
                 BConstructor annotation = reflection.getExecutableElement().getAnnotation(BConstructor.class);
                 if (annotation != null) {
                     method.addAnnotation(AnnotationSpec.builder(BConstructorNotProcess.class).build());
+                } else {
+                    // check method
+                    interfaceBuilder.addMethod(generateMethodCheck(reflection, parameterSpecs));
                 }
             }
             interfaceBuilder.addMethod(method.build());
@@ -120,6 +131,17 @@ public class BlackReflectionInterfaceProxy {
                 .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
                 .addAnnotation(AnnotationSpec.builder(BFieldCheckNotProcess.class).build())
                 .returns(Field.class);
+        return method.build();
+    }
+
+    private MethodSpec generateMethodCheck(BlackReflectionInterfaceInfo reflection, List<ParameterSpec> parameterSpecs) {
+        MethodSpec.Builder method = MethodSpec.methodBuilder("_check" + reflection.getExecutableElement().getSimpleName().toString())
+                .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
+                .addAnnotation(AnnotationSpec.builder(BMethodCheckNotProcess.class).build())
+                .returns(Method.class);
+        for (ParameterSpec parameterSpec : parameterSpecs) {
+            method.addParameter(parameterSpec);
+        }
         return method.build();
     }
 
