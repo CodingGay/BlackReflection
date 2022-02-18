@@ -84,7 +84,7 @@ public class BlackReflectionProxy {
     }
 
     private MethodSpec generaIsLoadMethod() {
-        MethodSpec.Builder builder = MethodSpec.methodBuilder("classReady")
+        MethodSpec.Builder builder = MethodSpec.methodBuilder("getRealClass")
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 .returns(ClassName.get(Class.class));
 
