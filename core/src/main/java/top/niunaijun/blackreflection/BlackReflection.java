@@ -13,6 +13,7 @@ import top.niunaijun.blackreflection.annotation.BClass;
 import top.niunaijun.blackreflection.annotation.BConstructor;
 import top.niunaijun.blackreflection.annotation.BConstructorNotProcess;
 import top.niunaijun.blackreflection.annotation.BField;
+import top.niunaijun.blackreflection.annotation.BFieldCheckNotProcess;
 import top.niunaijun.blackreflection.annotation.BFieldNotProcess;
 import top.niunaijun.blackreflection.annotation.BFieldSetNotProcess;
 import top.niunaijun.blackreflection.annotation.BParamClass;
@@ -94,8 +95,8 @@ public class BlackReflection {
                         // void
                         BFieldSetNotProcess bFieldSetNotProcess = method.getAnnotation(BFieldSetNotProcess.class);
                         if (bFieldSetNotProcess != null) {
-                            // startsWith "set"
-                            name = name.substring(3);
+                            // startsWith "_set"
+                            name = name.substring("_set".length());
                             Reflector on = Reflector.on(aClass).field(name);
                             if (isStatic) {
                                 on.set(args[0]);
@@ -106,6 +107,15 @@ public class BlackReflection {
                                 on.set(callerByWeak, args[0]);
                             }
                             return 0;
+                        }
+
+                        // check
+                        BFieldCheckNotProcess bFieldCheckNotProcess = method.getAnnotation(BFieldCheckNotProcess.class);
+                        if (bFieldCheckNotProcess != null) {
+                            // startsWith "check"
+                            name = name.substring("check".length());
+                            Reflector on = Reflector.on(aClass).field(name);
+                            return on.getField();
                         }
 
                         // method

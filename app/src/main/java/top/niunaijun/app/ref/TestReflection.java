@@ -39,4 +39,7 @@ public interface TestReflection {
 
     @BStaticField
     String sStaticValue();
+
+    @BStaticField
+    String fakeField();
 }

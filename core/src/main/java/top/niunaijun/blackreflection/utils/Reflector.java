@@ -113,7 +113,11 @@ public class Reflector {
             throw new Exception("Oops!", e);
         }
     }
-    
+
+    public Field getField() {
+        return mField;
+    }
+
     protected Field findField(String name) throws NoSuchFieldException {
         try {
             return mType.getField(name);

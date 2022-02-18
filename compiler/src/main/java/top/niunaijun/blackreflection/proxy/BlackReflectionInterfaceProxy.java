@@ -8,6 +8,7 @@ import com.squareup.javapoet.ParameterSpec;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,7 @@ import javax.lang.model.type.TypeMirror;
 import top.niunaijun.blackreflection.BlackReflectionInterfaceInfo;
 import top.niunaijun.blackreflection.annotation.BConstructor;
 import top.niunaijun.blackreflection.annotation.BConstructorNotProcess;
+import top.niunaijun.blackreflection.annotation.BFieldCheckNotProcess;
 import top.niunaijun.blackreflection.annotation.BFieldNotProcess;
 import top.niunaijun.blackreflection.annotation.BFieldSetNotProcess;
 import top.niunaijun.blackreflection.annotation.BParamClass;
@@ -93,6 +95,7 @@ public class BlackReflectionInterfaceProxy {
             if (reflection.isField()) {
                 method.addAnnotation(AnnotationSpec.builder(BFieldNotProcess.class).build());
                 interfaceBuilder.addMethod(generateFieldSet(reflection));
+                interfaceBuilder.addMethod(generateFieldCheck(reflection));
             } else {
                 BConstructor annotation = reflection.getExecutableElement().getAnnotation(BConstructor.class);
                 if (annotation != null) {
@@ -105,10 +108,18 @@ public class BlackReflectionInterfaceProxy {
     }
 
     private MethodSpec generateFieldSet(BlackReflectionInterfaceInfo reflection) {
-        MethodSpec.Builder method = MethodSpec.methodBuilder("set" + reflection.getExecutableElement().getSimpleName().toString())
+        MethodSpec.Builder method = MethodSpec.methodBuilder("_set" + reflection.getExecutableElement().getSimpleName().toString())
                 .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
                 .addParameter(ClassName.get("java.lang", "Object"), "value", Modifier.FINAL)
                 .addAnnotation(AnnotationSpec.builder(BFieldSetNotProcess.class).build());
+        return method.build();
+    }
+
+    private MethodSpec generateFieldCheck(BlackReflectionInterfaceInfo reflection) {
+        MethodSpec.Builder method = MethodSpec.methodBuilder("_check" + reflection.getExecutableElement().getSimpleName().toString())
+                .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
+                .addAnnotation(AnnotationSpec.builder(BFieldCheckNotProcess.class).build())
+                .returns(Field.class);
         return method.build();
     }
 

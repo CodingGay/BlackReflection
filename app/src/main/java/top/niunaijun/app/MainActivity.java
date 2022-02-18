@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import java.lang.reflect.Field;
+
 import top.niunaijun.app.bean.TestReflection;
 import top.niunaijun.app.ref.BRTestReflection;
 import top.niunaijun.blackreflection.R;
@@ -45,14 +47,20 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d(TAG, "============================");
 
+        // checkField
+        Field field = BRTestReflection.get()._checkfakeField();
+        Log.d(TAG, "checkField: " + field);
+
+        Log.d(TAG, "============================");
+
         // setContextField
-        BRTestReflection.get(testReflection).setmContextValue(contextValue + " changed");
+        BRTestReflection.get(testReflection)._setmContextValue(contextValue + " changed");
         Log.d(TAG, "mContextValue: " + BRTestReflection.get(testReflection).mContextValue());
 
         Log.d(TAG, "============================");
 
         // setStaticField
-        BRTestReflection.get().setsStaticValue(staticValue + " changed");
+        BRTestReflection.get()._setsStaticValue(staticValue + " changed");
         Log.d(TAG, "sStaticValue: " + BRTestReflection.get().sStaticValue());
 
         Log.d(TAG, "============================");
