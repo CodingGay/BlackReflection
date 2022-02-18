@@ -149,9 +149,11 @@ BRTestReflection是程序自动生成的类，生成规则是BR + ClassName
     @top.niunaijun.blackreflection.annotation.BField.* <methods>;
     @top.niunaijun.blackreflection.annotation.BFieldNotProcess.* <methods>;
     @top.niunaijun.blackreflection.annotation.BFieldSetNotProcess.* <methods>;
+    @top.niunaijun.blackreflection.annotation.BFieldCheckNotProcess.* <methods>;
     @top.niunaijun.blackreflection.annotation.BMethod.* <methods>;
     @top.niunaijun.blackreflection.annotation.BStaticField.* <methods>;
     @top.niunaijun.blackreflection.annotation.BStaticMethod.* <methods>;
+    @top.niunaijun.blackreflection.annotation.BMethodCheckNotProcess.* <methods>;
     @top.niunaijun.blackreflection.annotation.BConstructor.* <methods>;
     @top.niunaijun.blackreflection.annotation.BConstructorNotProcess.* <methods>;
 }
