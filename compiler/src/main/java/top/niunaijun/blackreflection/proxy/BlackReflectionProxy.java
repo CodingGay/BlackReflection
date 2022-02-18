@@ -86,7 +86,7 @@ public class BlackReflectionProxy {
     private MethodSpec generaIsLoadMethod() {
         MethodSpec.Builder builder = MethodSpec.methodBuilder("classReady")
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                .returns(ClassName.BOOLEAN);
+                .returns(ClassName.get(Class.class));
 
         String statement = "return top.niunaijun.blackreflection.utils.ClassUtil.classReady($T.class)";
         builder.addStatement(statement,

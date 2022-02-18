@@ -13,28 +13,27 @@ import top.niunaijun.blackreflection.annotation.BClassNameNotProcess;
  * 此处无Bug
  */
 public class ClassUtil {
-    public static boolean classReady(Class<?> clazz) {
+    public static Class<?> classReady(Class<?> clazz) {
         BClassNameNotProcess bClassNameNotProcess = clazz.getAnnotation(BClassNameNotProcess.class);
         if (bClassNameNotProcess != null) {
             return classReady(bClassNameNotProcess.value());
         }
         BClass annotation = clazz.getAnnotation(BClass.class);
         if (annotation != null) {
-            return true;
+            return annotation.value();
         }
         BClassName bClassName = clazz.getAnnotation(BClassName.class);
         if (bClassName != null) {
             return classReady(bClassName.value());
         }
-        return false;
+        return null;
     }
 
-    private static boolean classReady(String clazz) {
+    private static Class<?> classReady(String clazz) {
         try {
-            Class.forName(clazz);
-            return true;
+            return Class.forName(clazz);
         } catch (ClassNotFoundException ignored) {
         }
-        return false;
+        return null;
     }
 }
