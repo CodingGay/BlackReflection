@@ -98,7 +98,7 @@ TestReflection testReflection = BRTestReflection.get()._new("a", "b");
 反射方法
 ```java
 // 静态方法
-BRTestReflection.get(testReflection).testContextInvoke("context", 0);
+BRTestReflection.get().testStaticInvoke("static", 0);
 
 // 上下文方法
 BRTestReflection.get(testReflection).testContextInvoke("context", 0);
