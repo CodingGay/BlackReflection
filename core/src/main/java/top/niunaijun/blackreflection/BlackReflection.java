@@ -31,6 +31,7 @@ import top.niunaijun.blackreflection.utils.Reflector;
  */
 @SuppressWarnings("unchecked")
 public class BlackReflection {
+    public static boolean DEBUG = false;
     private static final Map<Class<?>, Object> sProxyCache = new HashMap<>();
 
     // key caller
@@ -128,7 +129,9 @@ public class BlackReflection {
                         }
                         return call;
                     } catch (Throwable throwable) {
-                        throwable.printStackTrace();
+                        if (DEBUG) {
+                            throwable.printStackTrace();
+                        }
                         if (throwable instanceof BlackNullPointerException) {
                             throw new NullPointerException(throwable.getMessage());
                         }
