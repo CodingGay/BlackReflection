@@ -50,6 +50,7 @@ public class BlackReflectionProxy {
                 .addMethod(generaNotCallerMethod(false))
                 .addMethod(generaCallerMethod(true))
                 .addMethod(generaCallerMethod(false))
+                .addMethod(generaIsLoadMethod())
                 .build();
         return JavaFile.builder(mPackageName, reflection).build();
     }
@@ -78,6 +79,18 @@ public class BlackReflectionProxy {
                 BR,
                 mContextInterface,
                 withException
+        );
+        return builder.build();
+    }
+
+    private MethodSpec generaIsLoadMethod() {
+        MethodSpec.Builder builder = MethodSpec.methodBuilder("classReady")
+                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                .returns(ClassName.BOOLEAN);
+
+        String statement = "return top.niunaijun.blackreflection.utils.ClassUtil.classReady($T.class)";
+        builder.addStatement(statement,
+                mContextInterface
         );
         return builder.build();
     }

@@ -19,7 +19,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         TestReflection testReflection = testBConstructor();
-
+        boolean classReady = BRTestReflection.classReady();
+        Log.d(TAG, "classReady: " + classReady);
         Log.d(TAG, "============================");
 
         // testInvokeContext
