@@ -88,7 +88,8 @@ public class BlackReflectionInterfaceProxy {
                 }
                 method.addParameter(builder.build());
             }
-            method.returns(TypeName.get(reflection.getExecutableElement().getReturnType()));
+            TypeName typeName = TypeName.get(reflection.getExecutableElement().getReturnType());
+            method.returns(typeName.box());
             if (reflection.isField()) {
                 method.addAnnotation(AnnotationSpec.builder(BFieldNotProcess.class).build());
                 interfaceBuilder.addMethod(generateFieldSet(reflection));
