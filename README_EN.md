@@ -89,13 +89,13 @@ public interface TestReflection {
 #### 2. Build your project, it will generate the code automatically.
 
 #### 3. Write the code heartily!
-Constructor
+Constructor:
 ```java
 TestReflection testReflection = BRTestReflection.get()._new("a");
 TestReflection testReflection = BRTestReflection.get()._new("a", "b");
 ```
 
-Reflect Methods
+Reflect Methods:
 ```java
 // Static Method
 BRTestReflection.get().testStaticInvoke("static", 0);
@@ -104,7 +104,7 @@ BRTestReflection.get().testStaticInvoke("static", 0);
 BRTestReflection.get(testReflection).testContextInvoke("context", 0);
 ```
 
-Reflect Fields
+Reflect Fields:
 ```java
 // Static Field
 String staticValue = BRTestReflection.get().sStaticValue();
@@ -113,7 +113,7 @@ String staticValue = BRTestReflection.get().sStaticValue();
 String contextValue = BRTestReflection.get(testReflection).mContextValue();
 ```
 
-Set the value of Fields
+Set the value of Fields:
 ```java
 // Static Field
 BRTestReflection.get().setsStaticValue(staticValue + " changed");

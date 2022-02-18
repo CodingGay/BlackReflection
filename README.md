@@ -91,13 +91,13 @@ public interface TestReflection {
 #### 2. build一次，让我生成相关的代码。
 
 #### 3. 可以尽情的反射代码
-构造函数
+构造函数：
 ```java
 TestReflection testReflection = BRTestReflection.get()._new("a");
 TestReflection testReflection = BRTestReflection.get()._new("a", "b");
 ```
 
-反射方法
+反射方法：
 ```java
 // 静态方法
 BRTestReflection.get().testStaticInvoke("static", 0);
@@ -106,7 +106,7 @@ BRTestReflection.get().testStaticInvoke("static", 0);
 BRTestReflection.get(testReflection).testContextInvoke("context", 0);
 ```
 
-反射变量
+反射变量：
 ```java
 // 静态变量
 String staticValue = BRTestReflection.get().sStaticValue();
@@ -115,7 +115,7 @@ String staticValue = BRTestReflection.get().sStaticValue();
 String contextValue = BRTestReflection.get(testReflection).mContextValue();
 ```
 
-设置变量
+设置变量：
 ```java
 // 静态变量
 BRTestReflection.get().setsStaticValue(staticValue + " changed");
