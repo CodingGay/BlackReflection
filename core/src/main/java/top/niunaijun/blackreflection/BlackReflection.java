@@ -52,15 +52,15 @@ public class BlackReflection {
                         return (T) o;
                     }
                 }
-//                else {
-//                    Map<Class<?>, Object> callerClassMap = sCallerProxyCache.get(caller);
-//                    if (callerClassMap != null) {
-//                        Object o = callerClassMap.get(clazz);
-//                        if (o != null) {
-//                            return (T) o;
-//                        }
-//                    }
-//                }
+                else {
+                    Map<Class<?>, Object> callerClassMap = sCallerProxyCache.get(caller);
+                    if (callerClassMap != null) {
+                        Object o = callerClassMap.get(clazz);
+                        if (o != null) {
+                            return (T) o;
+                        }
+                    }
+                }
             }
 
             final WeakReference<Object> weakCaller = caller == null ? null : new WeakReference<>(caller);
@@ -84,7 +84,7 @@ public class BlackReflection {
                             Object call;
                             Reflector on = Reflector.on(aClass).field(name);
                             if (isStatic) {
-                                call = on.get(args);
+                                call = on.get();
                             } else {
                                 if (callerByWeak == null) {
                                     return generateNullValue(returnType);
@@ -169,12 +169,12 @@ public class BlackReflection {
             if (caller == null) {
                 sProxyCache.put(clazz, o);
             } else {
-//                Map<Class<?>, Object> callerClassMap = sCallerProxyCache.get(caller);
-//                if (callerClassMap == null) {
-//                    callerClassMap = new HashMap<>();
-//                    sCallerProxyCache.put(caller, callerClassMap);
-//                }
-//                callerClassMap.put(clazz, o);
+                Map<Class<?>, Object> callerClassMap = sCallerProxyCache.get(caller);
+                if (callerClassMap == null) {
+                    callerClassMap = new HashMap<>();
+                    sCallerProxyCache.put(caller, callerClassMap);
+                }
+                callerClassMap.put(clazz, o);
             }
             return (T) o;
         } catch (ClassNotFoundException e) {
