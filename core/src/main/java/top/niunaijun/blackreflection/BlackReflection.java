@@ -116,8 +116,12 @@ public class BlackReflection {
                         if (bFieldCheckNotProcess != null) {
                             // startsWith "_check_"
                             name = name.substring("_check_".length());
-                            Reflector on = Reflector.on(aClass).field(name);
-                            return on.getField();
+                            try {
+                                Reflector on = Reflector.on(aClass).field(name);
+                                return on.getField();
+                            } catch (Throwable ignored) {
+                                return null;
+                            }
                         }
 
                         Class<?>[] paramClass = getParamClass(method);
@@ -127,8 +131,11 @@ public class BlackReflection {
                         if (bMethodCheckNotProcess != null) {
                             // startsWith "_check_"
                             name = name.substring("_check_".length());
-                            Reflector on = Reflector.on(aClass).method(name, paramClass);
-                            return on.getMethod();
+                            try {
+                                return Reflector.on(aClass).method(name, paramClass).getMethod();
+                            } catch (Throwable ignored) {
+                                return null;
+                            }
                         }
 
                         // method
