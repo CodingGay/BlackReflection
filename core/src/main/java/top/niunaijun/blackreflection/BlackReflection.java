@@ -96,8 +96,8 @@ public class BlackReflection {
                         // void
                         BFieldSetNotProcess bFieldSetNotProcess = method.getAnnotation(BFieldSetNotProcess.class);
                         if (bFieldSetNotProcess != null) {
-                            // startsWith "_set"
-                            name = name.substring("_set".length());
+                            // startsWith "_set_"
+                            name = name.substring("_set_".length());
                             Reflector on = Reflector.on(aClass).field(name);
                             if (isStatic) {
                                 on.set(args[0]);
@@ -113,8 +113,8 @@ public class BlackReflection {
                         // check field
                         BFieldCheckNotProcess bFieldCheckNotProcess = method.getAnnotation(BFieldCheckNotProcess.class);
                         if (bFieldCheckNotProcess != null) {
-                            // startsWith "check"
-                            name = name.substring("_check".length());
+                            // startsWith "_check_"
+                            name = name.substring("_check_".length());
                             Reflector on = Reflector.on(aClass).field(name);
                             return on.getField();
                         }
@@ -124,8 +124,8 @@ public class BlackReflection {
                         // check method
                         BMethodCheckNotProcess bMethodCheckNotProcess = method.getAnnotation(BMethodCheckNotProcess.class);
                         if (bMethodCheckNotProcess != null) {
-                            // startsWith "_check"
-                            name = name.substring("_check".length());
+                            // startsWith "_check_"
+                            name = name.substring("_check_".length());
                             Reflector on = Reflector.on(aClass).method(name, paramClass);
                             return on.getMethod();
                         }

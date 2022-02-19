@@ -48,19 +48,19 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "============================");
 
         // checkField
-        Field field = BRTestReflection.get()._checkfakeField();
+        Field field = BRTestReflection.get()._check_fakeField();
         Log.d(TAG, "checkField: " + field);
 
         Log.d(TAG, "============================");
 
         // setContextField
-        BRTestReflection.get(testReflection)._setmContextValue(contextValue + " changed");
+        BRTestReflection.get(testReflection)._set_mContextValue(contextValue + " changed");
         Log.d(TAG, "mContextValue: " + BRTestReflection.get(testReflection).mContextValue());
 
         Log.d(TAG, "============================");
 
         // setStaticField
-        BRTestReflection.get()._setsStaticValue(staticValue + " changed");
+        BRTestReflection.get()._set_sStaticValue(staticValue + " changed");
         Log.d(TAG, "sStaticValue: " + BRTestReflection.get().sStaticValue());
 
         Log.d(TAG, "============================");

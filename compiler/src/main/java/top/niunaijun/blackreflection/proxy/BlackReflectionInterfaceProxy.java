@@ -119,7 +119,7 @@ public class BlackReflectionInterfaceProxy {
     }
 
     private MethodSpec generateFieldSet(BlackReflectionInterfaceInfo reflection) {
-        MethodSpec.Builder method = MethodSpec.methodBuilder("_set" + reflection.getExecutableElement().getSimpleName().toString())
+        MethodSpec.Builder method = MethodSpec.methodBuilder("_set_" + reflection.getExecutableElement().getSimpleName().toString())
                 .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
                 .addParameter(ClassName.get("java.lang", "Object"), "value", Modifier.FINAL)
                 .addAnnotation(AnnotationSpec.builder(BFieldSetNotProcess.class).build());
@@ -127,7 +127,7 @@ public class BlackReflectionInterfaceProxy {
     }
 
     private MethodSpec generateFieldCheck(BlackReflectionInterfaceInfo reflection) {
-        MethodSpec.Builder method = MethodSpec.methodBuilder("_check" + reflection.getExecutableElement().getSimpleName().toString())
+        MethodSpec.Builder method = MethodSpec.methodBuilder("_check_" + reflection.getExecutableElement().getSimpleName().toString())
                 .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
                 .addAnnotation(AnnotationSpec.builder(BFieldCheckNotProcess.class).build())
                 .returns(Field.class);
@@ -135,7 +135,7 @@ public class BlackReflectionInterfaceProxy {
     }
 
     private MethodSpec generateMethodCheck(BlackReflectionInterfaceInfo reflection, List<ParameterSpec> parameterSpecs) {
-        MethodSpec.Builder method = MethodSpec.methodBuilder("_check" + reflection.getExecutableElement().getSimpleName().toString())
+        MethodSpec.Builder method = MethodSpec.methodBuilder("_check_" + reflection.getExecutableElement().getSimpleName().toString())
                 .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
                 .addAnnotation(AnnotationSpec.builder(BMethodCheckNotProcess.class).build())
                 .returns(Method.class);
