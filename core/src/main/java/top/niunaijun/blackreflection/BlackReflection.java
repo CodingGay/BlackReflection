@@ -152,7 +152,11 @@ public class BlackReflection {
                         return call;
                     } catch (Throwable throwable) {
                         if (DEBUG) {
-                            throwable.printStackTrace();
+                            if (throwable.getCause() != null) {
+                                throwable.getCause().printStackTrace();
+                            } else {
+                                throwable.printStackTrace();
+                            }
                         }
                         if (throwable instanceof BlackNullPointerException) {
                             throw new NullPointerException(throwable.getMessage());
