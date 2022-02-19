@@ -118,10 +118,10 @@ String contextValue = BRTestReflection.get(testReflection).mContextValue();
 设置变量：
 ```java
 // 静态变量
-BRTestReflection.get().setsStaticValue(staticValue + " changed");
+BRTestReflection.get()._set_sStaticValue(staticValue + " changed");
 
 // 上下文变量
-BRTestReflection.get(testReflection).setmContextValue(contextValue + " changed");
+BRTestReflection.get(testReflection)._set_mContextValue(contextValue + " changed");
 ```
 BRTestReflection是程序自动生成的类，生成规则是BR + ClassName
 - BRTestReflection.get() 用于调用静态方法
