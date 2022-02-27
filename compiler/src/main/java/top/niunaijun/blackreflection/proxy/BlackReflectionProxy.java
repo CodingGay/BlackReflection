@@ -25,6 +25,7 @@ public class BlackReflectionProxy {
 
     private final ClassName mContextInterface;
     private final ClassName mStaticInterface;
+    private final ClassName mInterface;
     private final String mPackageName;
 
     public BlackReflectionProxy(String packageName, BlackReflectionInfo reflection) {
@@ -36,6 +37,7 @@ public class BlackReflectionProxy {
 
         mContextInterface = ClassName.get(ClassUtils.getPackage(finalClass), ClassUtils.getName(finalClass + "Context"));
         mStaticInterface = ClassName.get(ClassUtils.getPackage(finalClass), ClassUtils.getName(finalClass + "Static"));
+        mInterface = ClassName.get(ClassUtils.getPackage(finalClass), ClassUtils.getName(finalClass));
     }
 
     public JavaFile generateJavaCode() {
@@ -50,7 +52,7 @@ public class BlackReflectionProxy {
                 .addMethod(generaNotCallerMethod(false))
                 .addMethod(generaCallerMethod(true))
                 .addMethod(generaCallerMethod(false))
-                .addMethod(generaIsLoadMethod())
+                .addMethod(generaGetRealClassMethod())
                 .build();
         return JavaFile.builder(mPackageName, reflection).build();
     }
@@ -83,14 +85,14 @@ public class BlackReflectionProxy {
         return builder.build();
     }
 
-    private MethodSpec generaIsLoadMethod() {
+    private MethodSpec generaGetRealClassMethod() {
         MethodSpec.Builder builder = MethodSpec.methodBuilder("getRealClass")
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 .returns(ClassName.get(Class.class));
 
         String statement = "return top.niunaijun.blackreflection.utils.ClassUtil.classReady($T.class)";
         builder.addStatement(statement,
-                mContextInterface
+                mInterface
         );
         return builder.build();
     }
