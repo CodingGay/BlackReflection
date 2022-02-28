@@ -45,24 +45,9 @@ public class BlackReflection {
 
     public static <T> T create(Class<T> clazz, final Object caller, boolean withException) {
         try {
-            if (!withException) {
-                if (caller == null) {
-                    Object o = sProxyCache.get(clazz);
-                    if (o != null) {
-                        return (T) o;
-                    }
-                }
-                else {
-                    Map<Class<?>, Object> callerClassMap = sCallerProxyCache.get(caller);
-                    if (callerClassMap != null) {
-                        Object o = callerClassMap.get(clazz);
-                        if (o != null) {
-                            return (T) o;
-                        }
-                    }
-                }
-            }
-
+            T proxy = getProxy(clazz, caller, withException);
+            if (proxy != null)
+                return proxy;
             final WeakReference<Object> weakCaller = caller == null ? null : new WeakReference<>(caller);
 
             final Class<?> aClass = getClassNameByBlackClass(clazz);
@@ -190,6 +175,30 @@ public class BlackReflection {
             return (T) o;
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
+        }
+        return null;
+    }
+
+    private static <T> T getProxy(Class<T> clazz, final Object caller, boolean withException) {
+        try {
+            if (!withException) {
+                if (caller == null) {
+                    Object o = sProxyCache.get(clazz);
+                    if (o != null) {
+                        return (T) o;
+                    }
+                }
+                else {
+                    Map<Class<?>, Object> callerClassMap = sCallerProxyCache.get(caller);
+                    if (callerClassMap != null) {
+                        Object o = callerClassMap.get(clazz);
+                        if (o != null) {
+                            return (T) o;
+                        }
+                    }
+                }
+            }
+        } catch (Throwable ignore) {
         }
         return null;
     }
