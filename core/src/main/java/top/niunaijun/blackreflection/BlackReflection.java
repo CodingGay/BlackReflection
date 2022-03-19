@@ -34,6 +34,7 @@ import top.niunaijun.blackreflection.utils.Reflector;
 @SuppressWarnings("unchecked")
 public class BlackReflection {
     public static boolean DEBUG = false;
+    public static boolean CACHE = false;
     private static final Map<Class<?>, Object> sProxyCache = new HashMap<>();
 
     // key caller
@@ -180,6 +181,9 @@ public class BlackReflection {
     }
 
     private static <T> T getProxy(Class<T> clazz, final Object caller, boolean withException) {
+        if (!CACHE) {
+            return null;
+        }
         try {
             if (!withException) {
                 if (caller == null) {
