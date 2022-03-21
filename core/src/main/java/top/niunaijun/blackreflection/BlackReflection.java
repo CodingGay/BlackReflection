@@ -163,15 +163,17 @@ public class BlackReflection {
                 }
             });
 
-            if (caller == null) {
-                sProxyCache.put(clazz, o);
-            } else {
-                Map<Class<?>, Object> callerClassMap = sCallerProxyCache.get(caller);
-                if (callerClassMap == null) {
-                    callerClassMap = new HashMap<>();
-                    sCallerProxyCache.put(caller, callerClassMap);
+            if (CACHE) {
+                if (caller == null) {
+                    sProxyCache.put(clazz, o);
+                } else {
+                    Map<Class<?>, Object> callerClassMap = sCallerProxyCache.get(caller);
+                    if (callerClassMap == null) {
+                        callerClassMap = new HashMap<>();
+                        sCallerProxyCache.put(caller, callerClassMap);
+                    }
+                    callerClassMap.put(clazz, o);
                 }
-                callerClassMap.put(clazz, o);
             }
             return (T) o;
         } catch (ClassNotFoundException e) {
