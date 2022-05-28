@@ -1,14 +1,17 @@
 package top.niunaijun.app;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 import top.niunaijun.app.bean.TestReflection;
+import top.niunaijun.app.ref.BRActivityThread;
 import top.niunaijun.app.ref.BRTestReflection;
+import top.niunaijun.blackreflection.BlackReflection;
 import top.niunaijun.blackreflection.R;
 
 
@@ -19,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        BlackReflection.CACHE = true;
 
         TestReflection testReflection = testBConstructor();
         Class<?> classReady = BRTestReflection.getRealClass();
@@ -67,7 +71,39 @@ public class MainActivity extends AppCompatActivity {
 
         // use @BParamClassName
         BRTestReflection.get().testParamClassName("i am java.lang.String", 0);
+
+        findViewById(R.id.btn_start).setOnClickListener(v -> {
+            try {
+                int count = 10000;
+                long l = System.currentTimeMillis();
+                for (int i = 0; i < count; i++) {
+                    testSystemReflection();
+                }
+                Log.d(TAG, "SystemReflection: " + (System.currentTimeMillis() - l) + "ms");
+
+                l = System.currentTimeMillis();
+                for (int i = 0; i < count; i++) {
+                    testBlackReflection();
+                }
+                Log.d(TAG, "BlackReflection: " + (System.currentTimeMillis() - l) + "ms");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
     }
+
+    private void testSystemReflection() throws Exception {
+        Class<?> clazz = Class.forName("android.app.ActivityThread");
+        Method currentActivityThread = clazz.getDeclaredMethod("currentActivityThread");
+        currentActivityThread.setAccessible(true);
+        Object invoke = currentActivityThread.invoke(null);
+//        Log.d(TAG, "testSystemReflection: " + invoke);
+    }
+
+    private void testBlackReflection() throws Exception {
+        Object o = BRActivityThread.get().currentActivityThread();
+    }
+
 
     private TestReflection testBConstructor() {
         // test BConstructor

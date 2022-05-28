@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 import top.niunaijun.blackreflection.annotation.BClass;
+import top.niunaijun.blackreflection.annotation.BClassName;
+import top.niunaijun.blackreflection.annotation.BClassNameNotProcess;
 import top.niunaijun.blackreflection.annotation.BConstructor;
 import top.niunaijun.blackreflection.annotation.BConstructorNotProcess;
 import top.niunaijun.blackreflection.annotation.BField;
@@ -18,8 +20,6 @@ import top.niunaijun.blackreflection.annotation.BFieldNotProcess;
 import top.niunaijun.blackreflection.annotation.BFieldSetNotProcess;
 import top.niunaijun.blackreflection.annotation.BMethodCheckNotProcess;
 import top.niunaijun.blackreflection.annotation.BParamClass;
-import top.niunaijun.blackreflection.annotation.BClassName;
-import top.niunaijun.blackreflection.annotation.BClassNameNotProcess;
 import top.niunaijun.blackreflection.annotation.BParamClassName;
 import top.niunaijun.blackreflection.utils.Reflector;
 
@@ -36,6 +36,7 @@ public class BlackReflection {
     public static boolean DEBUG = false;
     public static boolean CACHE = false;
     private static final Map<Class<?>, Object> sProxyCache = new HashMap<>();
+    private static final Map<Class<?>, Object> sProxyWithExceptionCache = new HashMap<>();
 
     // key caller
     private static final WeakHashMap<Object, Map<Class<?>, Object>> sCallerProxyCache = new WeakHashMap<>();
@@ -163,16 +164,11 @@ public class BlackReflection {
                 }
             });
 
-            if (CACHE) {
-                if (caller == null) {
-                    sProxyCache.put(clazz, o);
+            if (caller == null) {
+                if (withException) {
+                    sProxyWithExceptionCache.put(clazz, o);
                 } else {
-                    Map<Class<?>, Object> callerClassMap = sCallerProxyCache.get(caller);
-                    if (callerClassMap == null) {
-                        callerClassMap = new HashMap<>();
-                        sCallerProxyCache.put(caller, callerClassMap);
-                    }
-                    callerClassMap.put(clazz, o);
+                    sProxyCache.put(clazz, o);
                 }
             }
             return (T) o;
@@ -183,25 +179,16 @@ public class BlackReflection {
     }
 
     private static <T> T getProxy(Class<T> clazz, final Object caller, boolean withException) {
-        if (!CACHE) {
-            return null;
-        }
         try {
-            if (!withException) {
-                if (caller == null) {
-                    Object o = sProxyCache.get(clazz);
-                    if (o != null) {
-                        return (T) o;
-                    }
+            if (caller == null) {
+                Object o;
+                if (withException) {
+                    o = sProxyWithExceptionCache.get(clazz);
+                } else {
+                    o = sProxyCache.get(clazz);
                 }
-                else {
-                    Map<Class<?>, Object> callerClassMap = sCallerProxyCache.get(caller);
-                    if (callerClassMap != null) {
-                        Object o = callerClassMap.get(clazz);
-                        if (o != null) {
-                            return (T) o;
-                        }
-                    }
+                if (o != null) {
+                    return (T) o;
                 }
             }
         } catch (Throwable ignore) {
